@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Mono : MonoBehaviour
+public class GMono : MonoBehaviour
 {
     protected virtual void Awake()
     {
@@ -22,4 +22,9 @@ public class Mono : MonoBehaviour
     protected virtual void OnEnable() {}
 
     protected virtual void OnDisable() {}
+
+    public Tiles GetTile(Transform obj)
+    {
+        return obj.GetComponent<Tiles>();
+    }
 }
