@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -25,6 +26,7 @@ public class BoardGen : BoardAb
 
         GenTileBackground();
         GenTile();
+        StartCoroutine(Board.BoardFilling.Fill());
     }
 
     protected void GenTileBackground()
@@ -45,19 +47,22 @@ public class BoardGen : BoardAb
     {
         for(int x = 0 ; x < Board.Size; x++)
         {
-            for(int y = 0; y < Board.Size; y++)
+            for(int y = Board.Size; y < Board.Size * 2; y++)
             {
                 Transform newTile = tileSpawner.Spawn(tileSpawner.TileObject, GetWorldPosition(x, y, -1), Quaternion.identity);
-                
+                //newTile.localScale = Vector3.zero;
+
                 newTile.gameObject.SetActive(true);
 
                 Tiles newTilePrefab = GetTile(newTile);
 
                 newTilePrefab.TilePrefab.SetTileEnum((TileEnum)Random.Range(0, newTilePrefab.TilePrefab.TileDictLength));
+                
                 while(HasMatchesWhenGen(newTilePrefab.TilePrefab.TileEnum, x, y))
                 {
                     newTilePrefab.TilePrefab.SetTileEnum((TileEnum)Random.Range(0, newTilePrefab.TilePrefab.TileDictLength));
                 }
+
                 newTilePrefab.TilePrefab.SetXY(x, y);
                 tiles[x, y] = newTile;   
             }
@@ -66,7 +71,7 @@ public class BoardGen : BoardAb
 
     protected bool HasMatchesWhenGen(TileEnum tileType, int x, int y)
     {
-        if(x < 2 && y >= 2)
+        if(x < 2 && y >= Board.Size + 2)
         {
             Tiles tileBot1 = GetTile(tiles[x, y - 1]);
             Tiles tileBot2 = GetTile(tiles[x, y - 1]);
@@ -75,7 +80,7 @@ public class BoardGen : BoardAb
                 return true;
         }
 
-        if(x >= 2 && y < 2)
+        if(x >= 2 && y < Board.Size + 2)
         {
             Tiles tileLeft1 = GetTile(tiles[x - 1, y]);
             Tiles tileLeft2 = GetTile(tiles[x - 1, y]);
@@ -85,7 +90,7 @@ public class BoardGen : BoardAb
                 return true;
         }
 
-        if(x >= 2 && y >= 2)
+        if(x >= 2 && y >= Board.Size + 2)
         {
             Tiles tileBot1 = GetTile(tiles[x, y - 1]);
             Tiles tileBot2 = GetTile(tiles[x, y - 1]);

@@ -27,4 +27,9 @@ public class GMono : MonoBehaviour
     {
         return obj.GetComponent<Tiles>();
     }
+
+    public Vector3 to2DVec(Vector3 vector)
+    {
+        return new Vector3(vector.x, vector.y, 0);
+    }
 }

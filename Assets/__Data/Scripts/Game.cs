@@ -18,6 +18,10 @@ public class Game : GMono
 
     public Tiles Tile => tile;
 
+    [SerializeField] private Board board;
+
+    public Board Board => board;
+
     protected override void Awake()
     {
         base.Awake();
@@ -32,6 +36,7 @@ public class Game : GMono
         LoadTileBGSpawner();
         LoadTileSpawner();
         LoadTile();
+        LoadBoard();
     }
 
     private void LoadTileBGSpawner()
@@ -53,5 +58,12 @@ public class Game : GMono
         if(tile != null) return;
 
         tile = FindObjectOfType<Tiles>();
+    }
+
+    private void LoadBoard()
+    {
+        if(board != null) return;
+
+        board = FindObjectOfType<Board>();
     }
 }

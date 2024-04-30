@@ -88,7 +88,7 @@ public class Spawner : GMono
         return newObj;
     }
 
-    public void Despawn(Transform obj)
+    protected virtual void Despawn(Transform obj)
     {
         if(objPool.Contains(obj)) return;
         objPool.Add(obj);

@@ -6,9 +6,16 @@ public class TilePrefab : TileAb
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private TileEnum tileEnum;
     [SerializeField] private int x;
+
+    public int X => x;
+
     [SerializeField] private int y;
+
+    public int Y => y;
+
     [SerializeField] private int preX;
     [SerializeField] private int preY;
+    [SerializeField] private bool canBeDestroyed = false;
 
     public void SetXY(int x, int y)
     {
@@ -22,6 +29,12 @@ public class TilePrefab : TileAb
     {
         get { return tileEnum; }
         set { SetTileEnum(value); }
+    }
+
+    public bool CanBeDestroyed
+    {
+        get { return canBeDestroyed; }
+        set { canBeDestroyed = value; }
     }
 
     private Dictionary<TileEnum, Sprite> tilePrefabDict;
