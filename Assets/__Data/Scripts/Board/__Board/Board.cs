@@ -18,12 +18,17 @@ public class Board : GMono
 
     public BoardFilling BoardFilling => boardFilling;
 
+    [SerializeField] private BoardDestroyedMatches boardDestroyedMatches;
+
+    public BoardDestroyedMatches BoardDestroyedMatches=> boardDestroyedMatches;
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
         LoadBoardGen();
         LoadBoardMatches();
         LoadBoardFilling();
+        LoadBoardDestroy();
     }
 
     private void LoadBoardGen()
@@ -45,5 +50,12 @@ public class Board : GMono
         if(boardFilling != null) return;
 
         boardFilling = GetComponentInChildren<BoardFilling>();
+    }
+
+    private void LoadBoardDestroy()
+    {
+        if(boardDestroyedMatches != null) return;
+
+        boardDestroyedMatches = GetComponentInChildren<BoardDestroyedMatches>();
     }
 }

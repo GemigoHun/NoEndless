@@ -16,6 +16,7 @@ public class TilePrefab : TileAb
     [SerializeField] private int preX;
     [SerializeField] private int preY;
     [SerializeField] private bool canBeDestroyed = false;
+    [SerializeField] private bool hasCount = false;
 
     public void SetXY(int x, int y)
     {
@@ -37,11 +38,22 @@ public class TilePrefab : TileAb
         set { canBeDestroyed = value; }
     }
 
+    public bool HasCount
+    {
+        get { return hasCount; }
+        set { hasCount = value; }
+    }
+
     private Dictionary<TileEnum, Sprite> tilePrefabDict;
 
     public int TileDictLength
     {
         get { return tilePrefabDict.Count;}
+    }
+
+    protected override void OnDisable()
+    {
+        canBeDestroyed = false;
     }
 
     protected override void LoadComponents()

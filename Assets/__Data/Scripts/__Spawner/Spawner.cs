@@ -6,7 +6,7 @@ public class Spawner : GMono
 {
     [SerializeField] private List<Transform> prefabs;
     [SerializeField] private Transform holder;
-    [SerializeField] private List<Transform> objPool;
+    [SerializeField] protected List<Transform> objPool;
 
     protected override void LoadComponents()
     {
@@ -88,7 +88,7 @@ public class Spawner : GMono
         return newObj;
     }
 
-    protected virtual void Despawn(Transform obj)
+    public virtual void Despawn(Transform obj)
     {
         if(objPool.Contains(obj)) return;
         objPool.Add(obj);

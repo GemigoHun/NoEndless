@@ -26,7 +26,8 @@ public class BoardGen : BoardAb
 
         GenTileBackground();
         GenTile();
-        StartCoroutine(Board.BoardFilling.Fill());
+        Board.BoardFilling.Fill();
+        StartCoroutine(GenFullBoard());
     }
 
     protected void GenTileBackground()
@@ -64,7 +65,53 @@ public class BoardGen : BoardAb
                 }
 
                 newTilePrefab.TilePrefab.SetXY(x, y);
+
                 tiles[x, y] = newTile;   
+            }
+        }
+    }
+
+    public IEnumerator GenFullBoard()
+    {
+        yield return new WaitForSeconds(1);
+
+        for(int y = Board.Size; y < Board.Size * 2; y++)
+        {
+            for(int x = 0; x < Board.Size; x++)
+            {
+                if(tiles[x, Board.Size * 2 - 1] == null)
+                {
+                    Transform newTile = tileSpawner.Spawn(tileSpawner.TileObject, Board.BoardGen.GetWorldPosition(x, Board.Size * 2 - 1, -1), Quaternion.identity);
+
+                    newTile.gameObject.SetActive(true);
+
+                    Tiles newTilePrefab = GetTile(newTile);
+
+                    newTilePrefab.TilePrefab.SetTileEnum((TileEnum)Random.Range(0, newTilePrefab.TilePrefab.TileDictLength));
+                    newTilePrefab.TilePrefab.SetXY(x, Board.Size * 2 - 1);
+
+                    tiles[x, Board.Size * 2 - 1] = newTile; 
+                }
+
+
+                if(tiles[x, y] == null)
+                {
+                    int yP = y;
+
+                    while(tiles[x, yP] == null)
+                    {
+                        yP++;
+                    }
+
+                    Tiles tile = GetTile(tiles[x, yP]);
+                    Vector3 toPos = Board.BoardGen.GetWorldPosition(x, y, -1);
+                    tile.transform.position = toPos;
+
+                    tile.TilePrefab.SetXY(x, y);
+
+                    tiles[x, y] = tiles[x, yP];
+                    tiles[x, yP] = null;
+                }
             }
         }
     }

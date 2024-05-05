@@ -6,6 +6,8 @@ public class BoardMatches : BoardAb
 {
     [SerializeField] private List<TileCanBeMatches> matches;
     private Transform[,] tiles;
+    [SerializeField] private int count = 0;
+    [SerializeField] private int totalCount = 0;
 
     public void MarkAsMatches(Transform[,] tiles)
     {
@@ -525,6 +527,80 @@ public class BoardMatches : BoardAb
 
             matches.Add(tile);
         }
-    }   
+    }
+
+    public void CountTurn()
+    {
+        tiles = Board.BoardGen.Tiles;
+
+        for(int x = 0; x < Board.Size; x++)
+        {
+            for(int y = 0; y < Board.Size; y++)
+            {
+                count = 0;
+
+                Count(x, y);
+
+                Debug.Log(count);
+
+                if(count >= 4) totalCount++;
+            }
+        }
+    }
+
+    private void Count(int x, int y)
+    {
+        Tiles tile = GetTile(tiles[x, y]);
+
+        if(!tile.TilePrefab.CanBeDestroyed) return;
+        if(tile.TilePrefab.HasCount) return;
+
+        tile.TilePrefab.HasCount = true;
+        count++;
+
+        if(y + 1 < Board.Size)
+        {
+            Tiles tileXY1 = GetTile(tiles[x, y + 1]);
+            
+            if(tileXY1.TilePrefab.CanBeDestroyed && !tileXY1.TilePrefab.HasCount
+                && tile.TilePrefab.TileEnum == tileXY1.TilePrefab.TileEnum)
+            {
+                Count(x, y + 1);
+            }
+        }
+
+        if(x + 1 < Board.Size)
+        {
+            Tiles tileX1Y = GetTile(tiles[x + 1, y]);
+            
+            if(tileX1Y.TilePrefab.CanBeDestroyed && !tileX1Y.TilePrefab.HasCount
+                && tile.TilePrefab.TileEnum == tileX1Y.TilePrefab.TileEnum)
+            {
+                Count(x + 1, y);
+            } 
+        }
+
+        if(y - 1 >= 0)
+        {
+            Tiles tileXYM1 = GetTile(tiles[x, y - 1]);
+            
+            if(tileXYM1.TilePrefab.CanBeDestroyed && !tileXYM1.TilePrefab.HasCount
+                && tile.TilePrefab.TileEnum == tileXYM1.TilePrefab.TileEnum)
+            {
+                Count(x, y - 1);
+            }
+        }
+
+        if(x - 1 >= 0)
+        {
+            Tiles tileXM1Y = GetTile(tiles[x - 1, y]);
+            
+            if(tileXM1Y.TilePrefab.CanBeDestroyed && !tileXM1Y.TilePrefab.HasCount
+                && tile.TilePrefab.TileEnum == tileXM1Y.TilePrefab.TileEnum)
+            {
+                Count(x - 1, y);
+            } 
+        }
+    }
 }
 

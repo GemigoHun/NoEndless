@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class TileSpawner : Spawner
@@ -17,5 +18,12 @@ public class TileSpawner : Spawner
         if(tileObject != null) return;
 
         tileObject = transform.Find("Prefabs").Find("Tile");
+    }
+
+    public override void Despawn(Transform obj)
+    {
+        if(objPool.Contains(obj)) return;
+        objPool.Add(obj);
+        obj.gameObject.SetActive(false);
     }
 }

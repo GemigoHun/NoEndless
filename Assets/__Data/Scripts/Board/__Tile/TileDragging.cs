@@ -11,6 +11,7 @@ public class TileDragging : TileAb
     private Transform[,] tiles;
     private Board board;
     private BoardMatches boardMatches;
+    private TileSpawner tileSpawner;
 
     private void OnMouseDown()
     {
@@ -19,6 +20,8 @@ public class TileDragging : TileAb
 
     private void OnMouseUp()
     {
+        if(transform.parent.position.y >= 4.5f) return;
+
         finalMousePos = to2DVec(InputManager.Instance.MousePos);
         Vector3 direction = finalMousePos - firstMousePos;
         angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -39,7 +42,15 @@ public class TileDragging : TileAb
 
         if(reverse) return;
 
-        StartCoroutine(DestroyMatches());
+        StartCoroutine(waitForChange());
+    }
+
+    private IEnumerator waitForChange()
+    {
+        yield return new WaitForSeconds(1);
+        boardMatches.MarkAsMatches(tiles);
+        boardMatches.CountTurn();
+        //board.BoardDestroyedMatches.StartDestroy();
     }
 
     private bool MoveTile(Tiles tile, int x, int y)
@@ -79,6 +90,7 @@ public class TileDragging : TileAb
             {
                 StartCoroutine(Tile.TileMoving.Moving(board.BoardGen.GetWorldPosition(x, y, -1), waitTime));
                 StartCoroutine(right.TileMoving.Moving(board.BoardGen.GetWorldPosition(x + 1, y, -1), waitTime));             
+                return true;
             }
 
             right.TilePrefab.SetXY(x, y);
@@ -100,7 +112,8 @@ public class TileDragging : TileAb
                 && !boardMatches.CanBeDestroyed(bottom, x, y, tiles, TileDirection.TOP))
             {
                 StartCoroutine(Tile.TileMoving.Moving(board.BoardGen.GetWorldPosition(x, y, -1), waitTime));
-                StartCoroutine(bottom.TileMoving.Moving(board.BoardGen.GetWorldPosition(x, y - 1, -1), waitTime));             
+                StartCoroutine(bottom.TileMoving.Moving(board.BoardGen.GetWorldPosition(x, y - 1, -1), waitTime));
+                return true;        
             }
 
             bottom.TilePrefab.SetXY(x, y);
@@ -122,7 +135,8 @@ public class TileDragging : TileAb
                 && !boardMatches.CanBeDestroyed(left, x, y, tiles, TileDirection.RIGHT))
             {
                 StartCoroutine(Tile.TileMoving.Moving(board.BoardGen.GetWorldPosition(x, y, -1), waitTime));
-                StartCoroutine(left.TileMoving.Moving(board.BoardGen.GetWorldPosition(x - 1, y, -1), waitTime));             
+                StartCoroutine(left.TileMoving.Moving(board.BoardGen.GetWorldPosition(x - 1, y, -1), waitTime));
+                return true;           
             }
 
             left.TilePrefab.SetXY(x, y);
@@ -134,26 +148,5 @@ public class TileDragging : TileAb
         }
 
         return false;
-    }
-
-    private IEnumerator DestroyMatches()
-    {
-        yield return new WaitForSeconds(waitTime);
-
-        boardMatches.MarkAsMatches(tiles);
-
-        for(int x = 0; x < board.Size; x++)
-        {
-            for(int y = 0; y < board.Size; y++)
-            {
-                Tiles t = GetTile(tiles[x, y]);
-
-                if(t.TilePrefab.CanBeDestroyed)
-                {
-                    Destroy(tiles[x, y].gameObject);
-                    tiles[x, y] = null;
-                }
-            }
-        }
     }
 }
