@@ -22,6 +22,10 @@ public class Game : GMono
 
     public Board Board => board;
 
+    [SerializeField] private Bot bot;
+
+    public Bot Bot => bot;
+
     protected override void Awake()
     {
         base.Awake();
@@ -37,6 +41,7 @@ public class Game : GMono
         LoadTileSpawner();
         LoadTile();
         LoadBoard();
+        LoadBot();
     }
 
     private void LoadTileBGSpawner()
@@ -65,5 +70,12 @@ public class Game : GMono
         if(board != null) return;
 
         board = FindObjectOfType<Board>();
+    }
+
+    private void LoadBot()
+    {
+        if(bot != null) return;
+
+        bot = FindObjectOfType<Bot>();
     }
 }
