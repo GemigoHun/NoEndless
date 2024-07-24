@@ -51,7 +51,7 @@ public class EntityMoving : EntityAb
 
         while(Vector3.Distance(transform.parent.position, targetPos.position) > targetRadius)
         {
-            transform.parent.position = Vector3.Lerp(transform.parent.position, targetPos.position, speed * Time.deltaTime);
+            transform.parent.position = Vector3.MoveTowards(transform.parent.position, targetPos.position, speed);
 
             yield return null;
         }
@@ -64,7 +64,7 @@ public class EntityMoving : EntityAb
 
         while(Vector3.Distance(transform.parent.position, firstPos) > Time.deltaTime)
         {
-            transform.parent.position = Vector3.Lerp(transform.parent.position, firstPos, speed * Time.deltaTime);
+            transform.parent.position = Vector3.MoveTowards(transform.parent.position, firstPos, speed);
 
             yield return null;
         }

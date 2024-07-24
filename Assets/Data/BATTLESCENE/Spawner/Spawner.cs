@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Lumin;
 
 public class Spawner : GMono
 {

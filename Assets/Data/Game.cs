@@ -30,6 +30,14 @@ public class Game : GMono
 
     public Player Player => player;
 
+    [SerializeField] private Swordrain swordrain;
+
+    public Swordrain Swordrain => swordrain;
+
+    [SerializeField] private SwordrainSpawner swordrainSpawner;
+
+    public SwordrainSpawner SwordrainSpawner=> swordrainSpawner;
+
     protected override void Awake()
     {
         base.Awake();
@@ -47,6 +55,7 @@ public class Game : GMono
         LoadBoard();
         LoadBot();
         LoadPlayer();
+        LoadSwordrainSpawner();
     }
 
     private void LoadTileBGSpawner()
@@ -90,4 +99,12 @@ public class Game : GMono
 
         player = FindObjectOfType<Player>();
     }
+
+    private void LoadSwordrainSpawner()
+    {
+        if(swordrainSpawner != null) return;
+
+        swordrainSpawner = FindObjectOfType<SwordrainSpawner>();
+    }
+    
 }

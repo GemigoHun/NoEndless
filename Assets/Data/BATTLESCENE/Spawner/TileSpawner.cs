@@ -19,11 +19,4 @@ public class TileSpawner : Spawner
 
         tileObject = transform.Find("Prefabs").Find("Tile");
     }
-
-    public override void Despawn(Transform obj)
-    {
-        if(objPool.Contains(obj)) return;
-        objPool.Add(obj);
-        obj.gameObject.SetActive(false);
-    }
 }

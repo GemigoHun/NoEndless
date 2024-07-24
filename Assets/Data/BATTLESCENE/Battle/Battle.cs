@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Battle : GMono
@@ -245,20 +243,19 @@ public class Battle : GMono
             if(pTurn)
             {
                 int pSlashDamage = tileCounter[TileEnum.SWORD] * player.Stats.SlashDamage;
-                int pSwordrainDamage = tileCounter[TileEnum.SWORD] * player.Stats.SwordrainDamage;
                 int botVHP = bot.Stats.VHP;
                 int lostHP;
 
-                if(pSlashDamage + pSwordrainDamage > botVHP)
+                if(pSlashDamage > botVHP)
                 {
-                    lostHP = pSlashDamage + pSwordrainDamage - botVHP;
+                    lostHP = pSlashDamage - botVHP;
                 }
                 else
                 {                  
                     lostHP = 0;
                 }
 
-                bot.Stats.VHPDes(pSlashDamage + pSwordrainDamage);
+                bot.Stats.VHPDes(pSlashDamage);
 
                 bot.Stats.HPDes(lostHP);
             }
@@ -266,20 +263,19 @@ public class Battle : GMono
             if(opTurn)
             {
                 int opSlashDamage = tileCounter[TileEnum.SWORD] * bot.Stats.SlashDamage;
-                int opSwordrainDamage = tileCounter[TileEnum.SWORD] * bot.Stats.SwordrainDamage;
                 int pVHP = player.Stats.VHP;
                 int lostHP;
 
-                if(opSlashDamage + opSwordrainDamage > pVHP)
+                if(opSlashDamage > pVHP)
                 {
-                    lostHP = opSlashDamage + opSwordrainDamage - pVHP;
+                    lostHP = opSlashDamage - pVHP;
                 }
                 else
                 {
                     lostHP = 0;
                 }
 
-                player.Stats.VHPDes(opSlashDamage + opSwordrainDamage);
+                player.Stats.VHPDes(opSlashDamage);
 
                 player.Stats.HPDes(lostHP);
             }
@@ -298,5 +294,26 @@ public class Battle : GMono
         OpText.Instance.ShieldStack.SetText($"{bot.Stats.ShieldStack}");
 
         yield return new WaitForSeconds(30);
+    }
+
+    public void DealSwordrainDamage(Entity dealer, Entity receiver)
+    {
+        int swordrainDamage = dealer.Stats.SwordrainDamage;
+        int receiverVHP = receiver.Stats.VHP;
+        int lostHP;
+
+        if(swordrainDamage > receiverVHP)
+        {
+            lostHP = swordrainDamage - receiverVHP;
+        }
+        else
+        {
+            lostHP = 0;
+        }
+
+        receiver.Stats.VHPDes(swordrainDamage);
+
+        receiver.Stats.HPDes(lostHP);
+
     }
 }
