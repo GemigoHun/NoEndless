@@ -255,9 +255,18 @@ public class Battle : GMono
                     lostHP = 0;
                 }
 
+                StartCoroutine(player.ESwordrain.SpawnSword(tileCounter[TileEnum.SWORD]));
+
+                yield return StartCoroutine(player.Moving.MoveToTarget());
+                yield return StartCoroutine(player.Atack.MeleeAttack());
+
                 bot.Stats.VHPDes(pSlashDamage);
 
                 bot.Stats.HPDes(lostHP);
+
+                yield return StartCoroutine(player.Moving.MoveBack());
+
+                player.Anim.IdleAnim();
             }
 
             if(opTurn)

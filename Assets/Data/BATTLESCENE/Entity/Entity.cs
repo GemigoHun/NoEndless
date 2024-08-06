@@ -33,6 +33,10 @@ public abstract class Entity : GMono
 
     public EntityAttack Atack => attack;
 
+    [SerializeField] private EntitySwordrain eSwordrain;
+
+    public EntitySwordrain ESwordrain => eSwordrain;
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -44,6 +48,7 @@ public abstract class Entity : GMono
         LoadModel();
         LoadAnimation();
         LoadAttack();
+        LoadSwordrain();
     }
 
     private void LoadEntityStats()
@@ -100,5 +105,12 @@ public abstract class Entity : GMono
         if(attack != null) return;
 
         attack = GetComponentInChildren<EntityAttack>();
+    }
+
+    private void LoadSwordrain()
+    {
+        if(eSwordrain != null) return;
+
+        eSwordrain = GetComponentInChildren<EntitySwordrain>();
     }
 }

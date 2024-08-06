@@ -8,15 +8,35 @@ public class EntitySwordrain : EntityAb
 
     public Transform Sword => sword;
 
-    [SerializeField] private int swordNums;
+    private float[] waitTime = new float[] {0, 0.2f, 0.3f, 0.5f};
 
-    public int SwordNums => swordNums;
+    public bool spawn = false;
+    public bool isSpawning = false;
 
-    public void SpawnSword()
+    protected override void Start()
     {
-        swordNums = Battle.Instance.TileCounter[TileEnum.SWORD];
-
-        
-
+        StartCoroutine(SpawnSword(5));
     }
+
+    public IEnumerator SpawnSword(int swordNums)
+    {
+        Debug.Log("A");
+        while (swordNums > 0)
+        {
+            Debug.Log("B");
+
+            Transform randomSpawnPoint = SpawnPointContainer.Instance.GetRandomSpawnPoint().transform;
+
+            Transform newSword = Game.Instance.SwordrainSpawner.Spawn(sword, randomSpawnPoint.position, randomSpawnPoint.rotation);
+
+            newSword.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(waitTime[Random.Range(0, 3)]);
+
+            swordNums--;
+            Debug.Log("" + swordNums);
+        }       
+    }
+
+
 }

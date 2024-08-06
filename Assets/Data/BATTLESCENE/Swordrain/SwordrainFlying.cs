@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SwrodrainFlying : GMono
+public class SwrodrainFlying : SwordrainAb
 {
     [SerializeField] private Transform target;
     [SerializeField] private float speed = 2;
@@ -10,16 +10,25 @@ public class SwrodrainFlying : GMono
 
     private void Update()
     {
+        LockTarget();
         Fly();
     }
 
     public void Fly()
     {
+        //Debug.Log(Vector3.Distance(transform.parent.position, target.position));
         targetRadius = player ? Game.Instance.Player.CapCollider.radius : bot ? Game.Instance.Bot.CapCollider.radius : 0;
 
-        while(Vector3.Distance(transform.parent.position, target.position) < targetRadius)
+        if(Vector3.Distance(transform.parent.position, target.position) > targetRadius)
         {
             transform.parent.position = Vector3.Lerp(transform.parent.position, target.position, speed);
         }
+    }
+
+    public void LockTarget()
+    {
+        Vector3 direction = target.position - transform.parent.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        Swordrain.Model.rotation = Quaternion.Euler(new Vector3(0, 0, angle + 90));
     }
 }
